@@ -1,6 +1,9 @@
 {
     "name": "ecoiris/php-signin-apple",
     "description": "sign in with apple",
+    "keywords": ["Apple", "JWT"],
+    "license": "MIT",
+    "type": "project",
     "autoload": {
         "psr-4": {
             "AppleSign\\": "src/"
@@ -12,8 +15,6 @@
             "email": "962224495@qq.com"
         }
     ],
-    "license": "MIT",
-    "version": "1.0.0",
     "require": {
         "php": ">=5.6.0",
         "ext-json": "*",
