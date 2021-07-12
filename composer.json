@@ -15,7 +15,6 @@
             "email": "962224495@qq.com"
         }
     ],
-    "minimum-stability": "stable",
     "require": {
         "php": ">=5.6.0",
         "ext-json": "*",
