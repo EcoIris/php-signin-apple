@@ -6,7 +6,7 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "AppleSign\\": "src/"
+            "AppleSign\\": "vendor/php-signin-apple/src/"
         }
     },
     "authors": [
