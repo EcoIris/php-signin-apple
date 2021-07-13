@@ -3,9 +3,6 @@
 namespace AppleSign\Apple;
 
 use AppleSign\ASDecoder;
-use AppleSign\Exception\BeforeValidException;
-use AppleSign\Exception\ExpiredException;
-use AppleSign\Exception\SignatureInvalidException;
 use DomainException;
 use InvalidArgumentException;
 use UnexpectedValueException;
@@ -67,10 +64,6 @@ class JWT
      * @return object The JWT's payload as a PHP object
      *
      * @throws UnexpectedValueException     Provided JWT was invalid
-     * @throws SignatureInvalidException    Provided JWT was invalid because the signature verification failed
-     * @throws BeforeValidException         Provided JWT is trying to be used before it's eligible as defined by 'nbf'
-     * @throws BeforeValidException         Provided JWT is trying to be used before it's been created as defined by 'iat'
-     * @throws ExpiredException             Provided JWT has since expired, as defined by the 'exp' claim
      *
      * @uses jsonDecode
      * @uses urlsafeB64Decode
@@ -128,13 +121,13 @@ class JWT
 
         // Check the signature
         if (!static::verify("$headb64.$bodyb64", $sig, $key, $header->alg)) {
-            throw new SignatureInvalidException('Signature verification failed');
+            throw new UnexpectedValueException('Signature verification failed');
         }
 
         // Check the nbf if it is defined. This is the time that the
         // token can actually be used. If it's not yet that time, abort.
         if (isset($payload->nbf) && $payload->nbf > ($timestamp + static::$leeway)) {
-            throw new BeforeValidException(
+            throw new UnexpectedValueException(
                 'Cannot handle token prior to ' . \date(DateTime::ISO8601, $payload->nbf)
             );
         }
@@ -143,14 +136,14 @@ class JWT
         // using tokens that have been created for later use (and haven't
         // correctly used the nbf claim).
         if (isset($payload->iat) && $payload->iat > ($timestamp + static::$leeway)) {
-            throw new BeforeValidException(
+            throw new UnexpectedValueException(
                 'Cannot handle token prior to ' . \date(DateTime::ISO8601, $payload->iat)
             );
         }
 
         // Check if this token has expired.
         if (isset($payload->exp) && ($timestamp - static::$leeway) >= $payload->exp) {
-            throw new ExpiredException('Expired token');
+            throw new UnexpectedValueException('Expired token');
         }
 
         return $payload;
