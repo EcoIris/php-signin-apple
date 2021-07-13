@@ -3,7 +3,7 @@
     "description": "sign in with apple",
     "keywords": ["Apple", "JWT"],
     "license": "MIT",
-    "type": "project",
+    "type": "library",
     "autoload": {
         "psr-4": {
             "AppleSign\\": "src/"
